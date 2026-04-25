@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mystarting.link</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <img class="bg-image" id="bgImage" alt="">
+  <div class="overlay"></div>
+
+  <button class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <div class="menu" id="menu">
+    <div class="menu-section">
+      <h3>About</h3>
+      <p style="font-size: 0.85rem; color: var(--date-color); line-height: 1.5;">
+        <strong>mystarting.link</strong> - simple, private start page.<br><br>
+        • No tracking, no analytics<br>
+        • All settings stored locally<br>
+        • SSL for security<br>
+        • Export/import your settings<br><br>
+        <a href="https://github.com/anomalyco/mystarting.link" style="color: var(--accent);">GitHub</a> to self-host.<br>
+        Contact: andy.martin@martinitc.com
+      </p>
+    </div>
+
+    <div class="menu-section">
+      <h3>Appearance</h3>
+      <div class="menu-item">
+        <label>
+          <input type="checkbox" id="showClock" checked>
+          Show clock
+        </label>
+      </div>
+      <div class="menu-item">
+        <label>
+          <input type="checkbox" id="showDate" checked>
+          Show date
+        </label>
+      </div>
+      <div class="menu-item">
+        <label>
+          <input type="checkbox" id="showWeather">
+          Show weather
+        </label>
+      </div>
+      <div class="menu-item">
+        <label>
+          <input type="checkbox" id="use24h" checked>
+          24-hour format
+        </label>
+      </div>
+      <div class="menu-item">
+        <label>Your name</label>
+        <input type="text" id="userName" class="custom-url-input" placeholder="Your name">
+      </div>
+<div class="menu-item">
+        <label>
+          <input type="checkbox" id="showGreeting">
+          Show greeting
+        </label>
+      </div>
+      <div class="menu-item">
+        <label>
+          <input type="checkbox" id="showNotes" checked>
+          Show notes
+        </label>
+      </div>
+      <div class="menu-item">
+        <label>
+          <input type="checkbox" id="showTasks" checked>
+          Show tasks
+        </label>
+      </div>
+      <div class="menu-item">
+        <span>Theme</span>
+        <select id="themeSelect">
+          <option value="dark">Dark BG</option>
+          <option value="light">Light BG</option>
+          <option value="terminal">Terminal</option>
+          <option value="dracula">Dracula</option>
+          <option value="nord">Nord</option>
+          <option value="monokai">Monokai</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="color-inputs">
+        <div class="menu-item">
+          <label>Clock</label>
+          <input type="color" id="clockColor" value="#ffffff">
+        </div>
+        <div class="menu-item">
+          <label>Date</label>
+          <input type="color" id="dateColor" value="#b3ffffff">
+        </div>
+        <div class="menu-item">
+          <label>Text</label>
+          <input type="color" id="textColor" value="#ffffff">
+        </div>
+        <div class="menu-item">
+          <label>Fav icons</label>
+          <input type="color" id="favIconColor" value="#64b5f6">
+        </div>
+        <div class="menu-item">
+          <label>Widget titles</label>
+          <input type="color" id="widgetTitleColor" value="#b3ffffff">
+        </div>
+      </div>
+      <button class="menu-btn" id="resetColorsBtn" style="margin-top: 0.5rem; width: 100%;">Reset Colors</button>
+    </div>
+
+    <div class="menu-section">
+      <h3>Search Engine</h3>
+      <div class="menu-item">
+        <span>Default</span>
+        <select id="defaultEngine">
+          <option value="duckduckgo">DuckDuckGo</option>
+          <option value="google">Google</option>
+          <option value="bing">Bing</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="menu-item" id="customEngineUrlItem" style="display: none;">
+        <label>Custom URL</label>
+        <input type="text" id="customEngineUrl" class="custom-url-input" placeholder="https://example.com/?q=">
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h3>Wallpaper</h3>
+      <div class="wallpaper-sources">
+        <span class="wallpaper-source active" data-source="none">None</span>
+        <span class="wallpaper-source" data-source="picsum">Picsum</span>
+      </div>
+      <div class="menu-item" id="lockWallpaperItem" style="display: none;">
+        <button class="menu-btn" id="setAsCustomBtn" style="width: 100%;">Set current Picsum as Custom URL</button>
+      </div>
+      <div class="menu-item">
+        <label>Custom URL</label>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <input type="text" id="customWallpaper" class="custom-url-input" placeholder="https://...">
+          <button class="menu-btn" id="applyWallpaperBtn" style="padding: 0.4rem 0.8rem;">Apply</button>
+        </div>
+      </div>
+      <div class="menu-item">
+        <label>Overlay opacity</label>
+        <input type="range" id="wallpaperOpacity" min="0" max="1" step="0.1" value="0.4" style="width: 100px;">
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h3>Weather</h3>
+      <div class="menu-item">
+        <label>Postal code</label>
+        <input type="text" id="weatherZip" class="custom-url-input" placeholder="90210">
+      </div>
+      <div class="menu-item">
+        <label>Country</label>
+        <input type="text" id="weatherCountry" class="custom-url-input" placeholder="US" style="width: 50px;">
+      </div>
+      <button class="menu-btn" id="applyWeatherBtn" style="margin-top: 0.5rem; width: 100%;">Update Weather</button>
+    </div>
+
+    <div class="menu-section">
+      <h3>Favorites</h3>
+      <div class="menu-item">
+        <span>View</span>
+        <select id="viewMode">
+          <option value="grid">Grid</option>
+          <option value="list">List</option>
+        </select>
+      </div>
+      <button class="menu-btn" id="addFavoriteBtn" style="margin-top: 0.5rem; width: 100%;">+ Add Favorite</button>
+      <div class="add-favorite-form" id="addFavoriteForm">
+        <input type="text" id="favName" placeholder="Name">
+        <input type="text" id="favUrl" placeholder="URL (https://...)">
+        <div class="add-fav-row">
+          <button class="menu-btn" id="saveFavorite">Save</button>
+          <button class="menu-btn" id="cancelFavorite">Cancel</button>
+        </div>
+      </div>
+      <div id="favoritesList" style="margin-top: 1rem;"></div>
+    </div>
+
+    <div class="menu-section">
+      <h3>Data</h3>
+      <div class="menu-buttons">
+        <button class="menu-btn" id="exportBtn">Export</button>
+        <button class="menu-btn" id="importBtn">Import</button>
+      </div>
+      <input type="file" id="importFile" accept=".json" style="display: none;">
+    </div>
+
+    <div class="menu-section">
+      <h3>Sync (IPFS)</h3>
+      <div class="menu-item">
+        <span>Provider</span>
+        <select id="ipfsProvider" style="max-width: 120px;">
+          <option value="nft.storage">NFT.Storage</option>
+          <option value="web3.storage">Web3.Storage</option>
+          <option value="infura">Infura</option>
+          <option value="pinata">Pinata</option>
+          <option value="custom">Custom URL</option>
+        </select>
+      </div>
+      <div class="menu-item" id="customProviderItem" style="display:none;">
+        <label>Custom API URL</label>
+        <input type="text" id="customProviderUrl" class="custom-url-input" placeholder="https://api.example.com/upload">
+      </div>
+      <div class="menu-item">
+        <label>API Key</label>
+        <input type="password" id="ipfsApiKey" class="custom-url-input" placeholder="Your API key">
+      </div>
+      <div class="menu-item">
+        <label>Password</label>
+        <input type="password" id="syncPassword" class="custom-url-input" placeholder="Encryption password">
+      </div>
+      <div class="menu-buttons">
+        <button class="menu-btn" id="syncUploadBtn" style="flex:1;">Upload</button>
+        <button class="menu-btn" id="syncDownloadBtn" style="flex:1;">Download</button>
+      </div>
+      <div id="syncStatus" style="font-size: 0.75rem; margin-top: 0.5rem; color: var(--date-color);"></div>
+      <div style="font-size: 0.7rem; color: var(--date-color); margin-top: 0.5rem;">
+        CID: <span id="currentCid">-</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="greeting" id="greeting"></div>
+    <div class="clock" id="clock"></div>
+    <div class="date" id="date"></div>
+    <div class="weather" id="weather"></div>
+
+    <div class="search-container">
+      <input type="text" class="search-bar" id="searchInput" placeholder="Search the web..." autocomplete="off">
+      <select class="search-engine-select" id="engineSelect"></select>
+      <div class="suggestions" id="suggestions"></div>
+    </div>
+
+    <div class="favorites-section">
+      <div class="favorites-header">
+        <span class="favorites-title">Favorites</span>
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridViewBtn" title="Grid view">&#9638;</button>
+          <button class="view-btn" id="listViewBtn" title="List view">&#9776;</button>
+        </div>
+      </div>
+      <div class="favorites" id="favorites"></div>
+    </div>
+
+    <div class="widget-row" id="widgetRow">
+      <div class="widget notes-widget" id="notesWidget">
+        <div class="widget-header">
+          <span>Notes</span>
+          <button class="widget-btn" id="saveNotesBtn">Save</button>
+        </div>
+        <textarea class="notes-textarea" id="notesTextarea" placeholder="Write notes here..."></textarea>
+      </div>
+      <div class="widget tasks-widget" id="tasksWidget">
+        <div class="widget-header">
+          <span>Tasks</span>
+          <button class="widget-btn" id="addTaskBtn">+</button>
+        </div>
+        <div class="tasks-list" id="tasksList"></div>
+        <input type="text" class="task-input" id="taskInput" placeholder="Add a task...">
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/sync.js"></script>
+</body>
+</html>
