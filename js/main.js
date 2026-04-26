@@ -729,6 +729,42 @@ function initEventListeners() {
   if (customProviderUrl && savedCustomUrl) {
     customProviderUrl.value = savedCustomUrl;
   }
+
+  const savedApiKey = SyncManager.getSavedApiKey();
+  if (ipfsApiKey && savedApiKey) {
+    ipfsApiKey.value = savedApiKey;
+  }
+
+  const magicLinkBtn = document.getElementById('magicLinkBtn');
+  if (magicLinkBtn) {
+    magicLinkBtn.addEventListener('click', () => {
+      const link = SyncManager.generateMagicLink();
+      navigator.clipboard.writeText(link).then(() => {
+        syncStatus.textContent = 'Magic link copied!';
+      }).catch(() => {
+        syncStatus.textContent = 'Copy failed - see URL';
+      });
+    });
+  }
+}
+
+function initSyncMagicLink() {
+  const syncData = SyncManager.loadFromMagicLink();
+  if (!syncData) return;
+
+  const ipfsProvider = document.getElementById('ipfsProvider');
+  const ipfsApiKey = document.getElementById('ipfsApiKey');
+  const syncCid = document.getElementById('syncCid');
+  const customProviderUrl = document.getElementById('customProviderUrl');
+  const syncStatus = document.getElementById('syncStatus');
+
+  if (syncData.provider && ipfsProvider) ipfsProvider.value = syncData.provider;
+  if (syncData.apiKey && ipfsApiKey) ipfsApiKey.value = syncData.apiKey;
+  if (syncData.cid && syncCid) syncCid.value = syncData.cid;
+  if (syncData.customUrl && customProviderUrl) customProviderUrl.value = syncData.customUrl;
+
+  if (syncStatus) syncStatus.textContent = 'Synced from magic link!';
+  history.replaceState(null, '', window.location.pathname);
 }
 
 function initNotesAndTasks() {
@@ -812,6 +848,7 @@ function init() {
   loadSettings();
   initEventListeners();
   initNotesAndTasks();
+  initSyncMagicLink();
   updateClock();
   setInterval(updateClock, 1000);
 }

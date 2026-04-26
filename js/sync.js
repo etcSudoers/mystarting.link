@@ -245,6 +245,7 @@ const SyncManager = {
       localStorage.setItem('mystartinglink_sync_cid', cid);
       localStorage.setItem('mystartinglink_sync_provider', provider);
       localStorage.setItem('mystartinglink_sync_custom_url', customUrl || '');
+      localStorage.setItem('mystartinglink_sync_api_key', apiKey);
     }
     
     return cid;
@@ -275,6 +276,34 @@ const SyncManager = {
   
   getSavedCustomUrl() {
     return localStorage.getItem('mystartinglink_sync_custom_url') || '';
+  },
+
+  getSavedApiKey() {
+    return localStorage.getItem('mystartinglink_sync_api_key') || '';
+  },
+
+  generateMagicLink(settings) {
+    const syncData = {
+      provider: this.getSavedProvider(),
+      apiKey: this.getSavedApiKey(),
+      cid: this.getSavedCid(),
+      customUrl: this.getSavedCustomUrl()
+    };
+    const encoded = btoa(JSON.stringify(syncData));
+    const url = new URL(window.location.href);
+    url.hash = 'sync=' + encoded;
+    return url.toString();
+  },
+
+  loadFromMagicLink() {
+    const hash = window.location.hash;
+    if (!hash.startsWith('#sync=')) return null;
+    try {
+      const encoded = hash.substring(5);
+      return JSON.parse(atob(encoded));
+    } catch (e) {
+      return null;
+    }
   }
 };
 
