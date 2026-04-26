@@ -299,7 +299,7 @@ const SyncManager = {
     const hash = window.location.hash;
     if (!hash.startsWith('#sync=')) return null;
     try {
-      const encoded = hash.substring(5);
+      const encoded = hash.substring(6);
       return JSON.parse(atob(encoded));
     } catch (e) {
       return null;
