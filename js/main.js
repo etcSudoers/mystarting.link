@@ -428,6 +428,9 @@ function initEventListeners() {
   const engineSelect = document.getElementById('engineSelect');
   const hamburger = document.getElementById('hamburger');
   const menuOverlay = document.getElementById('menuOverlay');
+  const menuClose = document.getElementById('menuClose');
+
+  if (menuClose) menuClose.addEventListener('click', closeMenu);
 
   if (searchInput) {
     searchInput.addEventListener('keypress', (e) => {
@@ -570,7 +573,12 @@ function initEventListeners() {
     const url = customWallpaper?.value?.trim();
     if (url) { settings.wallpaper.custom = url; settings.wallpaper.source = 'custom'; saveSettings(); loadWallpaper(); }
   });
-  if (wallpaperOpacity) wallpaperOpacity.addEventListener('input', (e) => { settings.wallpaper.opacity = parseFloat(e.target.value); saveSettings(); loadWallpaper(); });
+  if (wallpaperOpacity) wallpaperOpacity.addEventListener('input', (e) => { 
+    settings.wallpaper.opacity = parseFloat(e.target.value); 
+    saveSettings(); 
+    const overlay = document.querySelector('.overlay');
+    if (overlay) overlay.style.background = 'rgba(0, 0, 0, ' + settings.wallpaper.opacity + ')';
+  });
 
   const setAsCustomBtn = document.getElementById('setAsCustomBtn');
   if (setAsCustomBtn) setAsCustomBtn.addEventListener('click', () => {

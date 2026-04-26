@@ -318,6 +318,34 @@ body {
   background: rgba(255, 255, 255, 0.25);
 }
 
+.menu-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  background: var(--input-bg);
+  border: none;
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.menu-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+@media (max-width: 600px) {
+  .menu-close {
+    display: flex;
+  }
+}
+
 .hamburger span {
   width: 20px;
   height: 2px;
