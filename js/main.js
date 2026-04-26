@@ -735,40 +735,37 @@ function initEventListeners() {
     ipfsApiKey.value = savedApiKey;
   }
 
-  const magicLinkBtn = document.getElementById('magicLinkBtn');
-  if (magicLinkBtn) {
-    magicLinkBtn.addEventListener('click', () => {
-      const link = SyncManager.generateMagicLink();
-      
-      navigator.clipboard.writeText(link).then(() => {
-        syncStatus.textContent = 'Magic link copied!';
-      }).catch(() => {
-        syncStatus.textContent = 'Copy failed';
-      });
-
-      let qrContainer = document.getElementById('qrContainer');
-      if (!qrContainer) {
-        qrContainer = document.createElement('div');
-        qrContainer.id = 'qrContainer';
-        qrContainer.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:500;background:var(--menu-bg);padding:1rem;border-radius:12px;display:none;text-align:center;';
-        qrContainer.innerHTML = '<div id="qrCode" style="margin-bottom:0.5rem;"></div><button id="closeQr" style="padding:0.5rem;background:var(--input-bg);border:none;border-radius:8px;color:var(--text-color);cursor:pointer;width:100%;">Close</button>';
-        document.body.appendChild(qrContainer);
-        document.getElementById('closeQr').addEventListener('click', () => qrContainer.style.display = 'none');
-      }
-      
-      const qrDiv = document.getElementById('qrCode');
-      qrDiv.innerHTML = '';
-      new QRCode(qrDiv, {
-        text: link,
-        width: 200,
-        height: 200,
-        colorDark: '#000000',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.L
-      });
-      
-      qrContainer.style.display = 'block';
+  const showQrBtn = document.getElementById('showQrBtn');
+  if (showQrBtn) {
+    showQrBtn.addEventListener('click', () => {
+      showQrModal();
     });
+  }
+
+  function showQrModal() {
+    const link = SyncManager.generateMagicLink();
+    let qrContainer = document.getElementById('qrContainer');
+    if (!qrContainer) {
+      qrContainer = document.createElement('div');
+      qrContainer.id = 'qrContainer';
+      qrContainer.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:500;background:var(--menu-bg);padding:1.5rem;border-radius:16px;display:none;text-align:center;max-width:90vw;';
+      qrContainer.innerHTML = '<div style="margin-bottom:1rem;font-size:0.8rem;color:var(--date-color);word-break:break-all;max-width:300px;">Scan to open on another device</div><div id="qrCode"></div><button id="closeQr" style="margin-top:1rem;padding:0.6rem;background:var(--input-bg);border:none;border-radius:8px;color:var(--text-color);cursor:pointer;width:100%;">Close</button>';
+      document.body.appendChild(qrContainer);
+      document.getElementById('closeQr').addEventListener('click', () => qrContainer.style.display = 'none');
+    }
+    
+    const qrDiv = document.getElementById('qrCode');
+    qrDiv.innerHTML = '';
+    new QRCode(qrDiv, {
+      text: link,
+      width: 280,
+      height: 280,
+      colorDark: '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.L
+    });
+    
+    qrContainer.style.display = 'block';
   }
 }
 
