@@ -250,8 +250,8 @@ const SyncManager = {
     return cid;
   },
   
-  async downloadSettings(provider, apiKey, customUrl) {
-    const cid = localStorage.getItem('mystartinglink_sync_cid');
+  async downloadSettings(provider, apiKey, customUrl, providedCid) {
+    const cid = providedCid || localStorage.getItem('mystartinglink_sync_cid');
     if (!cid) return null;
     
     const encrypted = await IPFSSync.download(cid, provider, apiKey, customUrl);

@@ -691,7 +691,8 @@ function initEventListeners() {
       
       try {
         await SyncManager.initialize(password);
-        const decrypted = await SyncManager.downloadSettings(provider, apiKey, customUrl);
+        const userCid = syncCid ? syncCid.value.trim() : '';
+        const decrypted = await SyncManager.downloadSettings(provider, apiKey, customUrl, userCid);
         
         if (decrypted) {
           settings = { ...DEFAULT_SETTINGS, ...decrypted };
@@ -707,9 +708,13 @@ function initEventListeners() {
     });
   }
 
+  const syncCid = document.getElementById('syncCid');
   const savedCid = SyncManager.getSavedCid();
   if (savedCid) {
     currentCid.textContent = savedCid;
+  }
+  if (syncCid && savedCid) {
+    syncCid.value = savedCid;
   }
 
   const savedProvider = SyncManager.getSavedProvider();
