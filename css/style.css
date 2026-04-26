@@ -330,7 +330,7 @@ body {
   color: var(--text-color);
   font-size: 1.5rem;
   cursor: pointer;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
@@ -338,12 +338,6 @@ body {
 
 .menu-close:hover {
   background: rgba(255, 255, 255, 0.25);
-}
-
-@media (max-width: 600px) {
-  .menu-close {
-    display: flex;
-  }
 }
 
 .hamburger span {
