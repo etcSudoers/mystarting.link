@@ -9,3 +9,6 @@ mystarting.link - simple, private start page.
 • IPFS syncing with End-to-End encryption
 
 Weather by wttr.in - test your location there.
+
+## Screenshot
+![screenshot](https://github.com/etcSudoers/mystarting.link/blob/main/imgs/example.png)
