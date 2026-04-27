@@ -753,6 +753,99 @@ function initEventListeners() {
     });
   }
 
+  // Supabase auth event listeners
+  const supabaseSignUpBtn = document.getElementById('supabaseSignUpBtn');
+  const supabaseSignInBtn = document.getElementById('supabaseSignInBtn');
+  const supabaseSignOutBtn = document.getElementById('supabaseSignOutBtn');
+  const supabaseUploadBtn = document.getElementById('supabaseUploadBtn');
+  const supabaseDownloadBtn = document.getElementById('supabaseDownloadBtn');
+  const supabaseSyncStatus = document.getElementById('supabaseSyncStatus');
+
+  if (supabaseSignUpBtn) {
+    supabaseSignUpBtn.addEventListener('click', async () => {
+      const email = document.getElementById('supabaseEmail')?.value?.trim();
+      const password = document.getElementById('supabasePassword')?.value;
+      if (!email || !password) { alert('Please enter email and password'); return; }
+      if (password.length < 6) { alert('Password must be at least 6 characters'); return; }
+      supabaseSyncStatus.textContent = 'Signing up...';
+      try {
+        await SupabaseSync.signUp(email, password);
+        supabaseSyncStatus.textContent = 'Check your email to confirm signup!';
+      } catch (e) {
+        supabaseSyncStatus.textContent = 'Error: ' + e.message;
+      }
+    });
+  }
+
+  if (supabaseSignInBtn) {
+    supabaseSignInBtn.addEventListener('click', async () => {
+      const email = document.getElementById('supabaseEmail')?.value?.trim();
+      const password = document.getElementById('supabasePassword')?.value;
+      if (!email || !password) { alert('Please enter email and password'); return; }
+      supabaseSyncStatus.textContent = 'Signing in...';
+      try {
+        await SupabaseSync.signIn(email, password);
+        supabaseSyncStatus.textContent = 'Signed in!';
+      } catch (e) {
+        supabaseSyncStatus.textContent = 'Error: ' + e.message;
+      }
+    });
+  }
+
+  if (supabaseSignOutBtn) {
+    supabaseSignOutBtn.addEventListener('click', async () => {
+      supabaseSyncStatus.textContent = 'Signing out...';
+      try {
+        await SupabaseSync.signOut();
+        supabaseSyncStatus.textContent = 'Signed out';
+      } catch (e) {
+        supabaseSyncStatus.textContent = 'Error: ' + e.message;
+      }
+    });
+  }
+
+  if (supabaseUploadBtn) {
+    supabaseUploadBtn.addEventListener('click', async () => {
+      const password = document.getElementById('supabaseSyncPassword')?.value;
+      if (!password) { alert('Please enter sync password'); return; }
+      supabaseSyncStatus.textContent = 'Uploading...';
+      try {
+        const { key, salt } = await CryptoUtils.generateKey(password);
+        const encrypted = await CryptoUtils.encrypt(settings, key, salt);
+        await SupabaseSync.uploadSettings(encrypted);
+        supabaseSyncStatus.textContent = 'Uploaded!';
+      } catch (e) {
+        supabaseSyncStatus.textContent = 'Error: ' + e.message;
+      }
+    });
+  }
+
+  if (supabaseDownloadBtn) {
+    supabaseDownloadBtn.addEventListener('click', async () => {
+      const password = document.getElementById('supabaseSyncPassword')?.value;
+      if (!password) { alert('Please enter sync password'); return; }
+      supabaseSyncStatus.textContent = 'Downloading...';
+      try {
+        const encrypted = await SupabaseSync.downloadSettings();
+        if (!encrypted) { supabaseSyncStatus.textContent = 'No data found'; return; }
+        const combined = Uint8Array.from(atob(encrypted), c => c.charCodeAt(0));
+        const salt = combined.slice(0, 16);
+        const key = await CryptoUtils.importKey(password, salt);
+        const decrypted = await CryptoUtils.decrypt(encrypted, key);
+        if (decrypted) {
+          settings = { ...DEFAULT_SETTINGS, ...decrypted };
+          saveSettings();
+          applySettings();
+          supabaseSyncStatus.textContent = 'Settings restored!';
+        } else {
+          supabaseSyncStatus.textContent = 'Wrong password';
+        }
+      } catch (e) {
+        supabaseSyncStatus.textContent = 'Error: ' + e.message;
+      }
+    });
+  }
+
   function showQrModal() {
     const link = SyncManager.generateMagicLink();
     let qrContainer = document.getElementById('qrContainer');
@@ -881,6 +974,7 @@ function init() {
   initEventListeners();
   initNotesAndTasks();
   initSyncMagicLink();
+  SupabaseSync.init();
   updateClock();
   setInterval(updateClock, 1000);
 }

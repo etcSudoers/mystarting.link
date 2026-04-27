@@ -240,6 +240,39 @@
         CID: <span id="currentCid">-</span>
       </div>
     </div>
+
+    <div class="menu-section" id="supabaseAuthSection">
+      <h3>Cloud Sync (Supabase)</h3>
+      <div id="supabaseAuthForm">
+        <div class="menu-item">
+          <label>Email</label>
+          <input type="email" id="supabaseEmail" class="custom-url-input" placeholder="you@email.com">
+        </div>
+        <div class="menu-item">
+          <label>Password</label>
+          <input type="password" id="supabasePassword" class="custom-url-input" placeholder="Min 6 characters">
+        </div>
+        <div class="menu-buttons">
+          <button class="menu-btn" id="supabaseSignUpBtn" style="flex:1;">Sign Up</button>
+          <button class="menu-btn" id="supabaseSignInBtn" style="flex:1;">Sign In</button>
+        </div>
+      </div>
+      <div id="supabaseUserInfo" style="display:none;">
+        <div class="menu-item">
+          <span style="font-size: 0.85rem; color: var(--date-color); overflow: hidden; text-overflow: ellipsis;">Signed in: <span id="supabaseUserEmail"></span></span>
+        </div>
+        <button class="menu-btn" id="supabaseSignOutBtn" style="width: 100%; margin-top: 0.5rem;">Sign Out</button>
+      </div>
+      <div class="menu-item" style="margin-top: 0.5rem;">
+        <label>Sync Password</label>
+        <input type="password" id="supabaseSyncPassword" class="custom-url-input" placeholder="Encryption password">
+      </div>
+      <div class="menu-buttons">
+        <button class="menu-btn" id="supabaseUploadBtn" style="flex:1;">Upload</button>
+        <button class="menu-btn" id="supabaseDownloadBtn" style="flex:1;">Download</button>
+      </div>
+      <div id="supabaseSyncStatus" style="font-size: 0.75rem; margin-top: 0.5rem; color: var(--date-color);"></div>
+    </div>
   </div>
 
   <div class="container">
@@ -284,8 +317,10 @@
     </div>
   </div>
 
-  <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/sync.js"></script>
+  <script src="js/supabase-sync.js"></script>
+  <script src="js/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </body>
 </html>
