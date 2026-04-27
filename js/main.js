@@ -3,7 +3,7 @@ const STORAGE_KEY = 'mystartinglink_settings';
 const DEFAULT_SETTINGS = {
   showClock: true,
   showDate: true,
-  showWeather: false,
+  showWeather: true,
   showGreeting: false,
   showNotes: true,
   showTasks: true,
@@ -22,8 +22,8 @@ const DEFAULT_SETTINGS = {
     favIcon: '#64b5f6',
     widgetTitle: 'rgba(255,255,255,0.7)'
   },
-  wallpaper: { source: 'none', custom: '', opacity: 0.4, picsumId: '' },
-  weather: { zip: '', country: 'US' },
+  wallpaper: { source: 'default', custom: 'imgs/default.jpg', opacity: 0.4, picsumId: '' },
+  weather: { zip: 'New York' },
   favorites: [
     { name: 'GitHub', url: 'https://github.com' },
     { name: 'YouTube', url: 'https://youtube.com' },
@@ -111,7 +111,6 @@ function applySettings() {
     clock: document.getElementById('clock'),
     date: document.getElementById('date'),
     weatherZip: document.getElementById('weatherZip'),
-    weatherCountry: document.getElementById('weatherCountry'),
     showNotes: document.getElementById('showNotes'),
     showTasks: document.getElementById('showTasks'),
 clockColor: document.getElementById('clockColor'),
@@ -135,7 +134,6 @@ clockColor: document.getElementById('clockColor'),
   if (elements.customWallpaper) elements.customWallpaper.value = settings.wallpaper.custom || '';
   if (elements.wallpaperOpacity) elements.wallpaperOpacity.value = settings.wallpaper.opacity ?? 0.4;
   if (elements.weatherZip) elements.weatherZip.value = settings.weather?.zip || '';
-  if (elements.weatherCountry) elements.weatherCountry.value = settings.weather?.country || 'US';
   if (elements.clockColor) elements.clockColor.value = colors.clock;
   if (elements.dateColor) elements.dateColor.value = colors.date;
   if (elements.textColor) elements.textColor.value = colors.text;
@@ -347,6 +345,13 @@ function loadWallpaper() {
 
   if (source === 'none') return;
 
+  if (source === 'default') {
+    bg.src = 'imgs/default.jpg';
+    bg.onerror = () => { bg.style.display = 'none'; };
+    bg.style.display = 'block';
+    return;
+  }
+
   if (source === 'custom' && custom) {
     bg.src = custom;
     bg.onerror = () => { bg.style.display = 'none'; };
@@ -374,7 +379,6 @@ async function loadWeather() {
   if (!weatherEl) return;
 
   const zip = settings.weather?.zip;
-  const country = settings.weather?.country || 'US';
 
   if (!zip) {
     weatherEl.style.display = 'none';
@@ -384,13 +388,17 @@ async function loadWeather() {
   weatherEl.style.display = settings.showWeather ? 'flex' : 'none';
 
   try {
-    const res = await fetch('https://wttr.in/' + zip + (country !== 'US' ? ',' + country : '') + '?format=j1');
+    const res = await fetch('https://wttr.in/' + zip + '?format=j1');
     if (!res.ok) throw new Error('Weather unavailable');
 
     const data = await res.json();
     const current = data.current_condition[0];
     const temp = current.temp_F;
     const desc = current.weatherDesc[0].value;
+    const nearest = data.nearest_area?.[0];
+    const areaName = nearest?.areaName?.[0]?.value || zip;
+    const countryName = nearest?.country?.[0]?.value || '';
+    const location = countryName ? areaName + ', ' + countryName : areaName;
     const icon = current.weatherCode < 1000 ? '☀️' :
                 current.weatherCode < 2000 ? '⛅' :
                 current.weatherCode < 3000 ? '🌫️' :
@@ -400,12 +408,13 @@ async function loadWeather() {
                 current.weatherCode < 7000 ? '🌨️' :
                 current.weatherCode < 8000 ? '🌧️' : '🌡️';
 
-    const weatherUrl = 'https://wttr.in/' + zip + (country !== 'US' ? ',' + country : '');
+    const weatherUrl = 'https://wttr.in/' + zip;
     weatherEl.innerHTML = '<a href="' + weatherUrl + '" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">' +
       '<span class="weather-icon">' + icon + '</span>' +
       '<span class="weather-temp">' + temp + '°F</span>' +
       '<span class="weather-desc">' + desc + '</span>' +
-    '</a>';
+    '</a>' +
+    '<div class="weather-location">' + location + '</div>';
   } catch (err) {
     weatherEl.innerHTML = '<span class="weather-desc">Weather unavailable</span>';
   }
@@ -557,6 +566,9 @@ function initEventListeners() {
         settings.wallpaper.source = 'custom';
       } else if (el.dataset.source === 'picsum') {
         settings.wallpaper.source = 'picsum';
+      } else if (el.dataset.source === 'default') {
+        settings.wallpaper.source = 'default';
+        settings.wallpaper.custom = 'imgs/default.jpg';
       } else {
         settings.wallpaper.source = el.dataset.source;
       }
@@ -599,8 +611,7 @@ function initEventListeners() {
   const applyWeatherBtn = document.getElementById('applyWeatherBtn');
   if (applyWeatherBtn) applyWeatherBtn.addEventListener('click', () => {
     const zip = document.getElementById('weatherZip')?.value?.trim();
-    const country = document.getElementById('weatherCountry')?.value?.trim() || 'US';
-    if (zip) { settings.weather = { zip, country }; settings.showWeather = true; saveSettings(); loadWeather(); }
+    if (zip) { settings.weather = { zip }; settings.showWeather = true; saveSettings(); loadWeather(); }
   });
 
   if (exportBtn) exportBtn.addEventListener('click', () => {

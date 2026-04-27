@@ -83,8 +83,9 @@ body {
   color: var(--text-color);
   margin-bottom: 2rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .weather-icon {
@@ -98,6 +99,12 @@ body {
 .weather-desc {
   font-size: 1rem;
   color: var(--date-color);
+}
+
+.weather-location {
+  font-size: 0.85rem;
+  color: var(--date-color);
+  opacity: 0.8;
 }
 
 .search-container {

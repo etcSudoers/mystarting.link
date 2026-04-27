@@ -27,8 +27,10 @@
         • No tracking, no analytics<br>
         • All settings stored locally<br>
         • SSL for security<br>
-        • Export/import your settings<br><br>
-        <a href="https://github.com/anomalyco/mystarting.link" style="color: var(--accent);">GitHub</a> to self-host.<br>
+        • Export/import your settings<br>
+        • IPFS syncing with End-to-End encryption<br><br>
+        Weather by <a href="https://wttr.in" style="color: var(--accent);" target="_blank">wttr.in</a> - test your location there.<br><br>
+        <a href="https://github.com/etcSudoers/mystarting.link" style="color: var(--accent);">GitHub</a> to self-host.<br>
         Contact: andy.martin@martinitc.com
       </p>
     </div>
@@ -138,7 +140,8 @@
     <div class="menu-section">
       <h3>Wallpaper</h3>
       <div class="wallpaper-sources">
-        <span class="wallpaper-source active" data-source="none">None</span>
+        <span class="wallpaper-source" data-source="none">None</span>
+        <span class="wallpaper-source active" data-source="default">Default</span>
         <span class="wallpaper-source" data-source="picsum">Picsum</span>
       </div>
       <div class="menu-item" id="lockWallpaperItem" style="display: none;">
@@ -160,12 +163,11 @@
     <div class="menu-section">
       <h3>Weather</h3>
       <div class="menu-item">
-        <label>Postal code</label>
-        <input type="text" id="weatherZip" class="custom-url-input" placeholder="90210">
+        <label>Location</label>
+        <input type="text" id="weatherZip" class="custom-url-input" placeholder="New York">
       </div>
-      <div class="menu-item">
-        <label>Country</label>
-        <input type="text" id="weatherCountry" class="custom-url-input" placeholder="US" style="width: 50px;">
+      <div style="font-size: 0.75rem; color: var(--date-color); margin-top: 0.3rem; margin-bottom: 0.5rem;">
+        Use city name or "City,Country" for international. <a href="https://wttr.in" style="color: var(--accent);" target="_blank">Test on wttr.in</a>.
       </div>
       <button class="menu-btn" id="applyWeatherBtn" style="margin-top: 0.5rem; width: 100%;">Update Weather</button>
     </div>
