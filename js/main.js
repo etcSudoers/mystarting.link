@@ -111,9 +111,10 @@ function applySettings() {
     clock: document.getElementById('clock'),
     date: document.getElementById('date'),
     weatherZip: document.getElementById('weatherZip'),
+    userName: document.getElementById('userName'),
     showNotes: document.getElementById('showNotes'),
     showTasks: document.getElementById('showTasks'),
-clockColor: document.getElementById('clockColor'),
+    clockColor: document.getElementById('clockColor'),
     dateColor: document.getElementById('dateColor'),
     textColor: document.getElementById('textColor'),
     favIconColor: document.getElementById('favIconColor'),
@@ -159,6 +160,11 @@ clockColor: document.getElementById('clockColor'),
   loadWallpaper();
   loadWeather();
   renderFavorites();
+
+  const notesTextarea = document.getElementById('notesTextarea');
+  if (notesTextarea) notesTextarea.value = settings.notes || '';
+
+  renderTasks();
 }
 
 function updateEngineSelect() {
@@ -892,10 +898,41 @@ function initSyncMagicLink() {
   history.replaceState(null, '', window.location.pathname);
 }
 
+function renderTasks() {
+  const tasksList = document.getElementById('tasksList');
+  if (!tasksList) return;
+  tasksList.innerHTML = '';
+
+  settings.tasks.forEach((task, index) => {
+    const taskEl = document.createElement('div');
+    taskEl.className = `task-item${task.completed ? ' completed' : ''}`;
+    taskEl.innerHTML = `
+      <input type="checkbox" class="task-checkbox"${task.completed ? ' checked' : ''}>
+      <span class="task-text">${escapeHtml(task.text)}</span>
+      <button class="task-delete" data-index="${index}">&times;</button>
+    `;
+
+    const checkbox = taskEl.querySelector('.task-checkbox');
+    checkbox.addEventListener('change', () => {
+      settings.tasks[index].completed = checkbox.checked;
+      saveSettings();
+      renderTasks();
+    });
+
+    const deleteBtn = taskEl.querySelector('.task-delete');
+    deleteBtn.addEventListener('click', () => {
+      settings.tasks.splice(index, 1);
+      saveSettings();
+      renderTasks();
+    });
+
+    tasksList.appendChild(taskEl);
+  });
+}
+
 function initNotesAndTasks() {
   const notesTextarea = document.getElementById('notesTextarea');
   const saveNotesBtn = document.getElementById('saveNotesBtn');
-  const tasksList = document.getElementById('tasksList');
   const taskInput = document.getElementById('taskInput');
   const addTaskBtn = document.getElementById('addTaskBtn');
 
@@ -913,37 +950,6 @@ function initNotesAndTasks() {
 
     notesTextarea.addEventListener('input', () => {
       settings.notes = notesTextarea.value;
-    });
-  }
-
-  function renderTasks() {
-    if (!tasksList) return;
-    tasksList.innerHTML = '';
-    
-    settings.tasks.forEach((task, index) => {
-      const taskEl = document.createElement('div');
-      taskEl.className = `task-item${task.completed ? ' completed' : ''}`;
-      taskEl.innerHTML = `
-        <input type="checkbox" class="task-checkbox"${task.completed ? ' checked' : ''}>
-        <span class="task-text">${escapeHtml(task.text)}</span>
-        <button class="task-delete" data-index="${index}">&times;</button>
-      `;
-      
-      const checkbox = taskEl.querySelector('.task-checkbox');
-      checkbox.addEventListener('change', () => {
-        settings.tasks[index].completed = checkbox.checked;
-        saveSettings();
-        renderTasks();
-      });
-      
-      const deleteBtn = taskEl.querySelector('.task-delete');
-      deleteBtn.addEventListener('click', () => {
-        settings.tasks.splice(index, 1);
-        saveSettings();
-        renderTasks();
-      });
-      
-      tasksList.appendChild(taskEl);
     });
   }
 
