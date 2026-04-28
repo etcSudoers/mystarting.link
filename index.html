@@ -21,34 +21,59 @@
   <div class="menu" id="menu">
     <button class="menu-close" id="menuClose">&times;</button>
     <div class="menu-section">
-      <h3>About</h3>
-      <p style="font-size: 0.85rem; color: var(--date-color); line-height: 1.5;">
-        <strong>mystarting.link</strong> - simple, private start page.<br><br>
-        • No tracking, no analytics<br>
-        • All settings stored locally<br>
-        • SSL for security<br>
-        • Export/import your settings<br>
-        • IPFS syncing with End-to-End encryption<br><br>
-        Weather by <a href="https://wttr.in" style="color: var(--accent);" target="_blank">wttr.in</a> - test your location there.<br><br>
-        <a href="https://github.com/etcSudoers/mystarting.link" style="color: var(--accent);">GitHub</a> to self-host.<br>
-        Contact: andy.martin@martinitc.com
-      </p>
+      <details open>
+          <summary>About</summary>
+          <p style="font-size: 0.85rem; color: var(--date-color); line-height: 1.5;">
+            <strong>mystarting.link</strong> - simple, private start page.<br><br>
+            • No tracking, no analytics<br>
+            • All settings stored local-first<br>
+            - Export/Import local settings<br>
+            - Cloud syning (Supabase backend) with E2EE<br>
+            - IPFS syncing with E2EE<br>
+            • Themes and Walpapers<br>
+            • Favorites, Tasks, Notes<br>
+            • Weather by <a href="https://wttr.in" style="color: var(--accent);" target="_blank">wttr.in</a><br><br>
+
+            <a href="https://github.com/etcSudoers/mystarting.link" style="color: var(--accent);">GitHub</a> to self-host.<br>
+            Contact: andy.martin@martinitc.com
+          </p>
+      </details>
     </div>
 
     <div class="menu-section">
-      <h3>Appearance</h3>
+      <details>
+      <summary>Search Engine</summary>
       <div class="menu-item">
-        <label>
-          <input type="checkbox" id="showClock" checked>
-          Show clock
-        </label>
+        <span>Default</span>
+        <select id="defaultEngine">
+          <option value="duckduckgo">DuckDuckGo</option>
+          <option value="google">Google</option>
+          <option value="bing">Bing</option>
+          <option value="custom">Custom</option>
+        </select>
       </div>
-      <div class="menu-item">
-        <label>
-          <input type="checkbox" id="showDate" checked>
-          Show date
-        </label>
+      <div class="menu-item" id="customEngineUrlItem" style="display: none;">
+        <label>Custom URL</label>
+        <input type="text" id="customEngineUrl" class="custom-url-input" placeholder="https://example.com/?q=">
       </div>
+      </details>
+    </div>      
+
+    <div class="menu-section">
+      <details>
+          <summary>Widgets</summary>
+           <div class="menu-item">
+            <label>
+            <input type="checkbox" id="showClock" checked>
+            Show clock
+            </label>
+          </div>
+          <div class="menu-item">
+            <label>
+            <input type="checkbox" id="showDate" checked>
+            Show date
+            </label>
+          </div>
       <div class="menu-item">
         <label>
           <input type="checkbox" id="showWeather">
@@ -61,15 +86,16 @@
           24-hour format
         </label>
       </div>
+
       <div class="menu-item">
-        <label>Your name</label>
-        <input type="text" id="userName" class="custom-url-input" placeholder="Your name">
-      </div>
-<div class="menu-item">
         <label>
           <input type="checkbox" id="showGreeting">
           Show greeting
         </label>
+      </div>
+      <div class="menu-item">
+        <label>Your name</label>
+        <input type="text" id="userName" class="custom-url-input" placeholder="Your name">
       </div>
       <div class="menu-item">
         <label>
@@ -83,7 +109,14 @@
           Show tasks
         </label>
       </div>
-      <div class="menu-item">
+      </details>
+    </div>
+
+    <div class="menu-section">
+      <details>
+        <summary>Themes / Colors</summary>
+
+        <div class="menu-item">
         <span>Theme</span>
         <select id="themeSelect">
           <option value="dark">Dark BG</option>
@@ -118,27 +151,14 @@
         </div>
       </div>
       <button class="menu-btn" id="resetColorsBtn" style="margin-top: 0.5rem; width: 100%;">Reset Colors</button>
-    </div>
+      </details>
+      </div>
+
+
 
     <div class="menu-section">
-      <h3>Search Engine</h3>
-      <div class="menu-item">
-        <span>Default</span>
-        <select id="defaultEngine">
-          <option value="duckduckgo">DuckDuckGo</option>
-          <option value="google">Google</option>
-          <option value="bing">Bing</option>
-          <option value="custom">Custom</option>
-        </select>
-      </div>
-      <div class="menu-item" id="customEngineUrlItem" style="display: none;">
-        <label>Custom URL</label>
-        <input type="text" id="customEngineUrl" class="custom-url-input" placeholder="https://example.com/?q=">
-      </div>
-    </div>
-
-    <div class="menu-section">
-      <h3>Wallpaper</h3>
+      <details>
+      <summary>Wallpaper</summary>
       <div class="wallpaper-sources">
         <span class="wallpaper-source" data-source="none">None</span>
         <span class="wallpaper-source active" data-source="default">Default</span>
@@ -158,10 +178,12 @@
         <label>Overlay opacity</label>
         <input type="range" id="wallpaperOpacity" min="0" max="1" step="0.1" value="0.4" style="width: 100px;">
       </div>
+      </details>
     </div>
 
     <div class="menu-section">
-      <h3>Weather</h3>
+      <details>
+      <summary>Weather</summary>
       <div class="menu-item">
         <label>Location</label>
         <input type="text" id="weatherZip" class="custom-url-input" placeholder="New York">
@@ -170,10 +192,12 @@
         Use city name or "City,Country" for international. <a href="https://wttr.in" style="color: var(--accent);" target="_blank">Test on wttr.in</a>.
       </div>
       <button class="menu-btn" id="applyWeatherBtn" style="margin-top: 0.5rem; width: 100%;">Update Weather</button>
+      </details>
     </div>
 
     <div class="menu-section">
-      <h3>Favorites</h3>
+      <details>
+      <summary>Favorites</summary>
       <div class="menu-item">
         <span>View</span>
         <select id="viewMode">
@@ -191,58 +215,23 @@
         </div>
       </div>
       <div id="favoritesList" style="margin-top: 1rem;"></div>
+      </details>
     </div>
 
     <div class="menu-section">
-      <h3>Data</h3>
+      <details>
+      <summary>Local Data</summary>
       <div class="menu-buttons">
         <button class="menu-btn" id="exportBtn">Export</button>
         <button class="menu-btn" id="importBtn">Import</button>
       </div>
       <input type="file" id="importFile" accept=".json" style="display: none;">
-    </div>
-
-    <div class="menu-section">
-      <h3>Sync (IPFS)</h3>
-      <div class="menu-item">
-        <span>Provider</span>
-        <select id="ipfsProvider" style="max-width: 120px;">
-          <option value="nft.storage">NFT.Storage</option>
-          <option value="web3.storage">Web3.Storage</option>
-          <option value="infura">Infura</option>
-          <option value="pinata">Pinata</option>
-          <option value="custom">Custom URL</option>
-        </select>
-      </div>
-      <div class="menu-item" id="customProviderItem" style="display:none;">
-        <label>Custom API URL</label>
-        <input type="text" id="customProviderUrl" class="custom-url-input" placeholder="https://api.example.com/upload">
-      </div>
-      <div class="menu-item">
-        <label>API Key</label>
-        <input type="password" id="ipfsApiKey" class="custom-url-input" placeholder="Your API key">
-      </div>
-      <div class="menu-item">
-        <label>Password</label>
-        <input type="password" id="syncPassword" class="custom-url-input" placeholder="Encryption password">
-      </div>
-      <div class="menu-item">
-        <label>CID (optional)</label>
-        <input type="text" id="syncCid" class="custom-url-input" placeholder="Enter CID to download">
-      </div>
-      <div class="menu-buttons">
-        <button class="menu-btn" id="syncUploadBtn" style="flex:1;">Upload</button>
-        <button class="menu-btn" id="syncDownloadBtn" style="flex:1;">Download</button>
-        <button class="menu-btn" id="showQrBtn" style="flex:1;">Show QR</button>
-      </div>
-      <div id="syncStatus" style="font-size: 0.75rem; margin-top: 0.5rem; color: var(--date-color);"></div>
-      <div style="font-size: 0.7rem; color: var(--date-color); margin-top: 0.5rem;">
-        CID: <span id="currentCid">-</span>
-      </div>
+      </details>
     </div>
 
     <div class="menu-section" id="supabaseAuthSection">
-      <h3>Cloud Sync (Supabase)</h3>
+      <details>
+      <summary>Cloud Sync (Supabase)</summary>
       <div id="supabaseAuthForm">
         <div class="menu-item">
           <label>Email</label>
@@ -264,7 +253,7 @@
         <button class="menu-btn" id="supabaseSignOutBtn" style="width: 100%; margin-top: 0.5rem;">Sign Out</button>
       </div>
       <div class="menu-item" style="margin-top: 0.5rem;">
-        <label>Sync Password</label>
+        <label>Encryption Password</label>
         <input type="password" id="supabaseSyncPassword" class="custom-url-input" placeholder="Encryption password">
       </div>
       <div class="menu-buttons">
@@ -272,7 +261,51 @@
         <button class="menu-btn" id="supabaseDownloadBtn" style="flex:1;">Download</button>
       </div>
       <div id="supabaseSyncStatus" style="font-size: 0.75rem; margin-top: 0.5rem; color: var(--date-color);"></div>
+      </details>
     </div>
+
+    <div class="menu-section">
+      <details>
+      <summary>IPFS Sync</summary>
+      <div class="menu-item">
+        <span>Provider</span>
+        <select id="ipfsProvider" style="max-width: 120px;">
+          <option value="nft.storage">NFT.Storage</option>
+          <option value="web3.storage">Web3.Storage</option>
+          <option value="infura">Infura</option>
+          <option value="pinata">Pinata</option>
+          <option value="custom">Custom URL</option>
+        </select>
+      </div>
+      <div class="menu-item" id="customProviderItem" style="display:none;">
+        <label>Custom API URL</label>
+        <input type="text" id="customProviderUrl" class="custom-url-input" placeholder="https://api.example.com/upload">
+      </div>
+      <div class="menu-item">
+        <label>API Key</label>
+        <input type="password" id="ipfsApiKey" class="custom-url-input" placeholder="Your API key">
+      </div>
+      <div class="menu-item">
+        <label>Encryption Password</label>
+        <input type="password" id="syncPassword" class="custom-url-input" placeholder="Encryption password">
+      </div>
+      <div class="menu-item">
+        <label>CID (optional)</label>
+        <input type="text" id="syncCid" class="custom-url-input" placeholder="Enter CID to download">
+      </div>
+      <div class="menu-buttons">
+        <button class="menu-btn" id="syncUploadBtn" style="flex:1;">Upload</button>
+        <button class="menu-btn" id="syncDownloadBtn" style="flex:1;">Download</button>
+        <button class="menu-btn" id="showQrBtn" style="flex:1;">Show QR</button>
+      </div>
+      <div id="syncStatus" style="font-size: 0.75rem; margin-top: 0.5rem; color: var(--date-color);"></div>
+      <div style="font-size: 0.7rem; color: var(--date-color); margin-top: 0.5rem;">
+        CID: <span id="currentCid">-</span>
+      </div>
+      </details>
+    </div>
+
+
   </div>
 
   <div class="container">
