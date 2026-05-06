@@ -78,6 +78,11 @@ function saveSettings() {
   } catch (e) {
     console.error('Failed to save settings:', e);
   }
+
+  // Auto-upload to cloud if logged in and password set
+  if (SupabaseSync?.currentUser && SupabaseSync?.encryptionPassword) {
+    SupabaseSync.autoUpload().catch(e => console.error('Auto-upload failed:', e));
+  }
 }
 
 function applySettings() {
@@ -810,15 +815,22 @@ function initEventListeners() {
     });
   }
 
+  // Store password on input
+  const supabaseSyncPasswordInput = document.getElementById('supabaseSyncPassword');
+  if (supabaseSyncPasswordInput) {
+    supabaseSyncPasswordInput.addEventListener('input', (e) => {
+      SupabaseSync.setPassword(e.target.value);
+    });
+  }
+
   if (supabaseUploadBtn) {
     supabaseUploadBtn.addEventListener('click', async () => {
       const password = document.getElementById('supabaseSyncPassword')?.value;
       if (!password) { alert('Please enter sync password'); return; }
+      SupabaseSync.setPassword(password);
       supabaseSyncStatus.textContent = 'Uploading...';
       try {
-        const { key, salt } = await CryptoUtils.generateKey(password);
-        const encrypted = await CryptoUtils.encrypt(settings, key, salt);
-        await SupabaseSync.uploadSettings(encrypted);
+        await SupabaseSync.autoUpload();
         supabaseSyncStatus.textContent = 'Uploaded!';
       } catch (e) {
         supabaseSyncStatus.textContent = 'Error: ' + e.message;
@@ -830,22 +842,11 @@ function initEventListeners() {
     supabaseDownloadBtn.addEventListener('click', async () => {
       const password = document.getElementById('supabaseSyncPassword')?.value;
       if (!password) { alert('Please enter sync password'); return; }
+      SupabaseSync.setPassword(password);
       supabaseSyncStatus.textContent = 'Downloading...';
       try {
-        const encrypted = await SupabaseSync.downloadSettings();
-        if (!encrypted) { supabaseSyncStatus.textContent = 'No data found'; return; }
-        const combined = Uint8Array.from(atob(encrypted), c => c.charCodeAt(0));
-        const salt = combined.slice(0, 16);
-        const key = await CryptoUtils.importKey(password, salt);
-        const decrypted = await CryptoUtils.decrypt(encrypted, key);
-        if (decrypted) {
-          settings = { ...DEFAULT_SETTINGS, ...decrypted };
-          saveSettings();
-          applySettings();
-          supabaseSyncStatus.textContent = 'Settings restored!';
-        } else {
-          supabaseSyncStatus.textContent = 'Wrong password';
-        }
+        await SupabaseSync.autoDownload();
+        supabaseSyncStatus.textContent = 'Settings restored!';
       } catch (e) {
         supabaseSyncStatus.textContent = 'Error: ' + e.message;
       }
